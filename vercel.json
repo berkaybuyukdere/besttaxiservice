@@ -1,6 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "buildCommand": "prisma generate && next build",
-  "installCommand": "npm install"
+  "buildCommand": "next build",
+  "installCommand": "npm install",
+  "build": {
+    "env": {
+      "DATABASE_URL": "postgresql://build:build@127.0.0.1:5432/postgres?schema=public"
+    }
+  }
 }

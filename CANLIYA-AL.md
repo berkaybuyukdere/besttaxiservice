@@ -22,7 +22,7 @@
 ## Adım 2 — Vercel (canlı site)
 
 1. **Import:** https://vercel.com/new/import?s=https://github.com/berkaybuyukdere/besttaxiservice  
-2. GitHub ile giriş → repo seç → **Deploy** öncesi **Environment Variables**:
+2. GitHub ile giriş → repo seç → **Deploy** öncesi **Environment Variables** (Production + Preview — **zorunlu**, yoksa build veya API hata verir):
 
 ```
 DATABASE_URL = (Supabase → Connect → Session pooler URI, şifre: Berkay122300.)

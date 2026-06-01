@@ -1,9 +1,13 @@
 import { config } from 'dotenv';
-import { defineConfig, env } from 'prisma/config';
+import { defineConfig } from 'prisma/config';
 
-// .env.local overrides .env (Supabase credentials)
 config({ path: '.env' });
 config({ path: '.env.local', override: true });
+
+// Vercel build has no .env file — generate must not require a real database.
+const databaseUrl =
+  process.env.DATABASE_URL ??
+  'postgresql://build:build@127.0.0.1:5432/postgres?schema=public';
 
 export default defineConfig({
   schema: 'prisma/schema.prisma',
@@ -12,6 +16,6 @@ export default defineConfig({
   },
   engine: 'classic',
   datasource: {
-    url: env('DATABASE_URL'),
+    url: databaseUrl,
   },
 });
