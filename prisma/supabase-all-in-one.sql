@@ -1,5 +1,6 @@
-◇ injected env (1) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
-◇ injected env (10) from .env.local // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+-- Best Taxi Service — run entire file in Supabase SQL Editor
+-- Admin after run: admin@besttaxiservice.ch / admin123
+
 -- CreateSchema
 CREATE SCHEMA IF NOT EXISTS "public";
 
@@ -120,6 +121,8 @@ CREATE UNIQUE INDEX "AdminUser_email_key" ON "AdminUser"("email");
 -- AddForeignKey
 ALTER TABLE "PricingOverride" ADD CONSTRAINT "PricingOverride_pricingId_fkey" FOREIGN KEY ("pricingId") REFERENCES "Pricing"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
+
+
 -- Run AFTER supabase-init.sql in Supabase SQL Editor
 -- Admin: admin@besttaxiservice.ch / admin123
 
@@ -143,6 +146,7 @@ VALUES (
   NOW()
 )
 ON CONFLICT ("email") DO NOTHING;
+
 -- Auto-generated — run in Supabase SQL Editor after supabase-init.sql
 INSERT INTO "Pricing" ("id", "region", "location", "taxiToAirport", "vanToAirport", "taxiToZurich", "vanToZurich", "updatedAt")
 VALUES
@@ -205,3 +209,4 @@ ON CONFLICT ("id") DO UPDATE SET
   "price" = EXCLUDED."price",
   "onRequest" = EXCLUDED."onRequest",
   "updatedAt" = NOW();
+

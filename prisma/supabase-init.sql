@@ -1,5 +1,3 @@
-◇ injected env (1) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
-◇ injected env (10) from .env.local // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
 -- CreateSchema
 CREATE SCHEMA IF NOT EXISTS "public";
 
@@ -119,4 +117,5 @@ CREATE UNIQUE INDEX "AdminUser_email_key" ON "AdminUser"("email");
 
 -- AddForeignKey
 ALTER TABLE "PricingOverride" ADD CONSTRAINT "PricingOverride_pricingId_fkey" FOREIGN KEY ("pricingId") REFERENCES "Pricing"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
 
