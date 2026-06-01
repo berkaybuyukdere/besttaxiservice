@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Booking {
+  id              String        @id @default(cuid())
+  bookingNumber   String        @unique
+  status          BookingStatus @default(PENDING)
+  pickupDate      DateTime
+  pickupTime      String
+  pickupLocation  String
+  dropoffLocation String
+  vehicleType     VehicleType
+  passengerName   String
+  passengerEmail  String
+  passengerPhone  String
+  flightNumber    String?
+  specialRequests String?
+  price           Float
+  isSameDay       Boolean       @default(false)
+  paymentMethod   PaymentMethod
+  approvalToken   String?       @unique
+  approvalTokenExpiresAt DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum VehicleType {
+  BUSINESS_FAMILY
+  VIP_ULTRA_COMFORT
+  PREMIUM_CLASS
+}
+
+enum PaymentMethod {
+  CARD
+  CASH
+  INVOICE
+}
+
+model Pricing {
+  id            String            @id @default(cuid())
+  region        String
+  location      String
+  taxiToAirport Float
+  vanToAirport  Float
+  taxiToZurich  Float
+  vanToZurich   Float
+  updatedAt     DateTime          @updatedAt
+  overrides     PricingOverride[]
+}
+
+model PricingOverride {
+  id        String   @id @default(cuid())
+  startDate DateTime
+  endDate   DateTime
+  modifier  Float
+  label     String
+  pricingId String?
+  pricing   Pricing? @relation(fields: [pricingId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model FixedRoute {
+  id          String   @id @default(cuid())
+  from        String
+  to          String
+  price       Float?
+  onRequest   Boolean  @default(false)
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Vehicle {
+  id              String   @id @default(cuid())
+  name            String
+  model           String
+  capacity        Int
+  luggageCapacity Int
+  imageUrl        String?
+  priceMultiplier Float    @default(1.0)
+  vehicleType     VehicleType
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
