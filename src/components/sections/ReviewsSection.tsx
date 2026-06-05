@@ -1,55 +1,84 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Star } from 'lucide-react';
+import { Star, Quote } from 'lucide-react';
 
 const REVIEWS = [
-  { initials: 'WM', name: 'Wolfgang Müller', source: 'Google', text: 'Reliable airport transfer. Fixed price is fair and transparent.' },
-  { initials: 'SK', name: 'Sara Kessler', source: 'TrustPilot', text: 'Pünktlich, professionell und sehr komfortabel. Nur zu empfehlen!' },
-  { initials: 'AP', name: 'Andrea Pellegrini', source: 'Google', text: 'Servizio eccellente! Prezzo fisso conveniente.' },
+  {
+    initials: 'WM',
+    name: 'Wolfgang Müller',
+    source: 'Google',
+    rating: 5,
+    text: 'Reliable airport transfer. Fixed price is fair and transparent. Driver was waiting with a name sign.',
+    route: 'ZRH → Zug',
+  },
+  {
+    initials: 'SK',
+    name: 'Sara Kessler',
+    source: 'TrustPilot',
+    rating: 5,
+    text: 'Pünktlich, professionell und sehr komfortabel. Mercedes V-Klasse war perfekt für unsere Familie.',
+    route: 'ZRH → Davos',
+  },
+  {
+    initials: 'AP',
+    name: 'Andrea Pellegrini',
+    source: 'Google',
+    rating: 5,
+    text: 'Servizio eccellente! Prezzo fisso conveniente. Consigliato per transfer aeroportuali.',
+    route: 'ZRH → Milano',
+  },
 ];
 
 export default function ReviewsSection() {
   const t = useTranslations('reviews');
 
   return (
-    <section className="section">
-      <p className="micro mb-2 text-[var(--accent-dark)]">Bewertungen</p>
-      <h2 className="section-title">{t('title')}</h2>
-      <p className="section-sub">{t('subtitle')}</p>
-
-      <div className="reviews-row">
+    <section className="section reviews-section-lux">
+      <div className="reviews-header-lux">
         <div>
-          <div className="rating-big">
-            <div className="rating-num">5.0</div>
-            <div className="flex justify-center gap-0.5 my-2">
+          <p className="micro mb-2 lux-gold">Bewertungen</p>
+          <h2 className="section-title">{t('title')}</h2>
+          <p className="section-sub">{t('subtitle')}</p>
+        </div>
+        <div className="reviews-scores">
+          <div className="review-score-card">
+            <div className="score-num">5.0</div>
+            <div className="score-stars">
               {[1, 2, 3, 4, 5].map((i) => (
-                <Star key={i} size={16} fill="var(--accent)" color="var(--accent)" />
+                <Star key={i} size={14} fill="var(--accent)" color="var(--accent)" />
               ))}
             </div>
-            <div className="rating-src">{t('googleRating')}</div>
+            <div className="score-label">{t('googleRating')}</div>
           </div>
-          <div className="rating-big">
-            <div className="rating-num" style={{ fontSize: 36 }}>4.8</div>
-            <div className="rating-src">{t('trustpilot')}</div>
+          <div className="review-score-card">
+            <div className="score-num">4.8</div>
+            <div className="score-label">{t('trustpilot')}</div>
           </div>
         </div>
-        <div className="review-cards">
-          {REVIEWS.map((r) => (
-            <div key={r.name} className="review-card">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-9 h-9 rounded-full bg-[var(--accent-light)] text-black flex items-center justify-center text-xs font-bold">
-                  {r.initials}
-                </div>
-                <div>
-                  <div className="text-sm font-semibold">{r.name}</div>
-                  <div className="text-xs text-gray-500">{r.source}</div>
+      </div>
+
+      <div className="reviews-grid-lux">
+        {REVIEWS.map((r) => (
+          <article key={r.name} className="review-card-lux">
+            <Quote size={20} className="review-quote-icon" />
+            <p className="review-text-lux">&ldquo;{r.text}&rdquo;</p>
+            <div className="review-footer-lux">
+              <div className="review-avatar">{r.initials}</div>
+              <div>
+                <div className="review-name">{r.name}</div>
+                <div className="review-meta">
+                  {r.source} · {r.route}
                 </div>
               </div>
-              <p className="text-sm text-gray-500 leading-relaxed">{r.text}</p>
+              <div className="review-stars-inline">
+                {Array.from({ length: r.rating }).map((_, i) => (
+                  <Star key={i} size={11} fill="var(--accent)" color="var(--accent)" />
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
+          </article>
+        ))}
       </div>
     </section>
   );

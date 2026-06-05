@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Edit2, Check, X } from 'lucide-react';
+import { Edit2, Check, X, MapPin } from 'lucide-react';
 import { PRICING_DATA, REGIONS } from '@/lib/pricing-data';
 import { cn } from '@/lib/utils';
 
@@ -23,11 +23,7 @@ export default function AdminPricingPage() {
   };
 
   const saveEdit = (id: string) => {
-    setPricing((prev) =>
-      prev.map((p) =>
-        p.id === id ? { ...p, ...editValues } : p
-      )
-    );
+    setPricing((prev) => prev.map((p) => (p.id === id ? { ...p, ...editValues } : p)));
     setEditingId(null);
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 2000);
@@ -37,108 +33,103 @@ export default function AdminPricingPage() {
 
   return (
     <>
-        <div className="flex justify-between items-start mb-6">
-          <div>
-            <p className="micro text-[var(--accent-dark)] mb-1">Live-Preise</p>
-            <h1 className="text-2xl font-bold">Preisliste</h1>
+      <div className="admin-page-header">
+        <div>
+          <p className="micro lux-gold mb-1">Live-Preise</p>
+          <h1 className="admin-page-title">Preisliste</h1>
+          <p className="admin-page-sub">Fixpreise nach Region — direkt bearbeitbar</p>
+        </div>
+        {saveSuccess && (
+          <div className="admin-toast success">
+            <Check size={14} /> Gespeichert
           </div>
-          {saveSuccess && (
-            <div className="flex items-center gap-1.5 bg-green-100 text-green-700 px-3 py-2 rounded-lg text-sm">
-              <Check size={14} /> Gespeichert
-            </div>
-          )}
-        </div>
+        )}
+      </div>
 
-        {/* Region tabs */}
-        <div className="flex flex-wrap gap-1.5 mb-5">
-          {REGIONS.map((region) => (
-            <button
-              key={region}
-              onClick={() => setSelectedRegion(region)}
-              className={cn(
-                'px-3 py-1.5 text-[12px] rounded-lg border transition-all',
-                selectedRegion === region
-                  ? 'bg-[#D85A30] text-white border-[#D85A30]'
-                  : 'bg-white border-[var(--color-border-tertiary)] text-[var(--color-text-secondary)] hover:border-[var(--color-border-secondary)]'
-              )}
-            >
-              {region}
-            </button>
-          ))}
-        </div>
+      <div className="admin-filter-chips" style={{ marginBottom: 20 }}>
+        {REGIONS.map((region) => (
+          <button
+            key={region}
+            type="button"
+            onClick={() => setSelectedRegion(region)}
+            className={cn('filter-chip', selectedRegion === region && 'active')}
+          >
+            {region}
+          </button>
+        ))}
+      </div>
 
-        <div className="bg-white border border-[var(--color-border-tertiary)] rounded-[14px] overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-[var(--color-border-tertiary)] bg-[var(--color-background-secondary)]">
-                  <th className="text-left px-5 py-3 text-[11px] font-medium uppercase tracking-wide text-[var(--color-text-secondary)]">Destination</th>
-                  <th className="text-center px-4 py-3 text-[11px] font-medium uppercase tracking-wide text-[var(--color-text-secondary)]">Taxi → Flughafen</th>
-                  <th className="text-center px-4 py-3 text-[11px] font-medium uppercase tracking-wide text-[var(--color-text-secondary)]">Van → Flughafen</th>
-                  <th className="text-center px-4 py-3 text-[11px] font-medium uppercase tracking-wide text-[var(--color-text-secondary)]">Taxi → Zürich</th>
-                  <th className="text-center px-4 py-3 text-[11px] font-medium uppercase tracking-wide text-[var(--color-text-secondary)]">Van → Zürich</th>
-                  <th className="px-4 py-3"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredPricing.map((entry) => (
-                  <tr key={entry.id} className="border-b border-[var(--color-border-tertiary)] last:border-0 hover:bg-[var(--color-background-secondary)] transition-colors">
-                    <td className="px-5 py-3 font-medium text-[13px]">{entry.location}</td>
-                    {editingId === entry.id ? (
-                      <>
-                        {(['taxiToAirport', 'vanToAirport', 'taxiToZurich', 'vanToZurich'] as const).map((field) => (
-                          <td key={field} className="px-4 py-3 text-center">
-                            <div className="flex items-center gap-1 justify-center">
-                              <span className="text-[11px] text-[var(--color-text-secondary)]">CHF</span>
-                              <input
-                                type="number"
-                                value={editValues[field]}
-                                onChange={(e) => setEditValues({ ...editValues, [field]: parseFloat(e.target.value) })}
-                                className="w-16 text-center border border-[#D85A30] rounded-[6px] px-1.5 py-1 text-[13px] outline-none"
-                              />
-                            </div>
-                          </td>
-                        ))}
-                        <td className="px-4 py-3">
-                          <div className="flex gap-1.5">
-                            <button
-                              onClick={() => saveEdit(entry.id)}
-                              className="w-7 h-7 rounded-lg bg-green-100 text-green-700 hover:bg-green-200 flex items-center justify-center"
-                            >
-                              <Check size={13} />
-                            </button>
-                            <button
-                              onClick={() => setEditingId(null)}
-                              className="w-7 h-7 rounded-lg bg-[var(--color-background-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-background-tertiary)] flex items-center justify-center"
-                            >
-                              <X size={13} />
-                            </button>
+      <div className="admin-table-wrap">
+        <div className="admin-table-header">
+          <h2>
+            <MapPin size={14} /> {selectedRegion}
+          </h2>
+          <span className="admin-meta">{filteredPricing.length} Destinationen</span>
+        </div>
+        <div className="admin-table-scroll">
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>Destination</th>
+                <th className="text-center">Taxi → Flughafen</th>
+                <th className="text-center">Van → Flughafen</th>
+                <th className="text-center">Taxi → Zürich</th>
+                <th className="text-center">Van → Zürich</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {filteredPricing.map((entry) => (
+                <tr key={entry.id}>
+                  <td>
+                    <strong>{entry.location}</strong>
+                    <span className="sub">{entry.region}</span>
+                  </td>
+                  {editingId === entry.id ? (
+                    <>
+                      {(['taxiToAirport', 'vanToAirport', 'taxiToZurich', 'vanToZurich'] as const).map((field) => (
+                        <td key={field} className="text-center">
+                          <div className="admin-price-input">
+                            <span>CHF</span>
+                            <input
+                              type="number"
+                              value={editValues[field]}
+                              onChange={(e) => setEditValues({ ...editValues, [field]: parseFloat(e.target.value) })}
+                            />
                           </div>
                         </td>
-                      </>
-                    ) : (
-                      <>
-                        {([entry.taxiToAirport, entry.vanToAirport, entry.taxiToZurich, entry.vanToZurich]).map((price, i) => (
-                          <td key={i} className="px-4 py-3 text-center">
-                            <span className="font-medium text-[#D85A30]">CHF {price}</span>
-                          </td>
-                        ))}
-                        <td className="px-4 py-3">
-                          <button
-                            onClick={() => startEdit(entry)}
-                            className="w-7 h-7 rounded-lg bg-[var(--color-background-secondary)] text-[var(--color-text-secondary)] hover:bg-[var(--color-background-tertiary)] flex items-center justify-center transition-colors"
-                          >
-                            <Edit2 size={13} />
+                      ))}
+                      <td>
+                        <div className="action-btns">
+                          <button type="button" onClick={() => saveEdit(entry.id)} title="Speichern">
+                            <Check size={14} />
                           </button>
+                          <button type="button" onClick={() => setEditingId(null)} title="Abbrechen">
+                            <X size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      {[entry.taxiToAirport, entry.vanToAirport, entry.taxiToZurich, entry.vanToZurich].map((price, i) => (
+                        <td key={i} className="price-cell text-center">
+                          CHF {price}
                         </td>
-                      </>
-                    )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                      ))}
+                      <td>
+                        <button type="button" className="admin-icon-btn" onClick={() => startEdit(entry)} title="Bearbeiten">
+                          <Edit2 size={13} />
+                        </button>
+                      </td>
+                    </>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
+      </div>
     </>
   );
 }

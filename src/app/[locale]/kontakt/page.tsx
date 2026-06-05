@@ -1,20 +1,26 @@
 import Image from 'next/image';
-import { Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Shield, MessageCircle, Zap } from 'lucide-react';
 import KontaktForm from '@/components/kontakt/KontaktForm';
 import PageShell from '@/components/layout/PageShell';
 
 const CONTACT_ITEMS = [
-  { icon: Phone, label: 'Telefon', value: '+41 76 302 03 26', href: 'tel:+41763020326' },
-  { icon: Mail, label: 'E-Mail', value: 'info@besttaxiservice.ch', href: 'mailto:info@besttaxiservice.ch' },
-  { icon: MapPin, label: 'Adresse', value: 'Industriestrasse 14, 8302 Kloten', href: null },
-  { icon: Clock, label: 'Erreichbarkeit', value: '7/24 – 365 Tage', href: null },
+  { icon: Phone, label: 'Telefon', value: '+41 76 302 03 26', href: 'tel:+41763020326', hint: 'Direkt erreichbar — auch kurzfristig' },
+  { icon: Mail, label: 'E-Mail', value: 'info@besttaxiservice.ch', href: 'mailto:info@besttaxiservice.ch', hint: 'Antwort in der Regel innerhalb weniger Stunden' },
+  { icon: MapPin, label: 'Standort', value: 'Industriestrasse 14, 8302 Kloten', href: null, hint: 'Direkt am Flughafen Zürich' },
+  { icon: Clock, label: 'Erreichbarkeit', value: '7/24 · 365 Tage', href: null, hint: 'Keine Wartezeiten am Telefon' },
 ] as const;
+
+const TRUST_POINTS = [
+  { icon: Shield, text: 'Fixpreis-Garantie ohne versteckte Kosten' },
+  { icon: Zap, text: 'Schnelle Bestätigung — oft innerhalb von 30 Min.' },
+  { icon: MessageCircle, text: 'Persönliche Betreuung auf Deutsch, EN, FR, IT' },
+];
 
 export default function KontaktPage() {
   return (
     <PageShell>
-      <div className="kontakt-page">
-        <header className="kontakt-hero">
+      <div className="kontakt-page kontakt-page-lux">
+        <header className="kontakt-hero kontakt-hero-lux">
           <div className="hero-image-wrap" aria-hidden>
             <Image
               src="/images/besttaxi.png"
@@ -26,25 +32,34 @@ export default function KontaktPage() {
             />
           </div>
           <div className="kontakt-hero-inner">
-            <p className="micro mb-3" style={{ color: 'var(--accent)' }}>
-              Kontakt · 7/24
-            </p>
+            <p className="micro mb-3 lux-gold">Kontakt · 7/24</p>
             <h1>
               Wir sind <span>für Sie da</span>
             </h1>
             <p className="lead">
-              Industriestrasse 14, 8302 Kloten · Zürich Flughafen — persönlich, schnell und
-              zuverlässig.
+              Industriestrasse 14, 8302 Kloten · Zürich Flughafen — persönlich, schnell und zuverlässig.
+              Rufen Sie an, schreiben Sie uns oder buchen Sie direkt online.
             </p>
+            <div className="kontakt-trust-row">
+              {TRUST_POINTS.map(({ icon: Icon, text }) => (
+                <span key={text} className="kontakt-trust-item">
+                  <Icon size={14} /> {text}
+                </span>
+              ))}
+            </div>
           </div>
         </header>
 
-        <div className="kontakt-body">
-          <div className="kontakt-grid">
-            <div>
-              <div className="kontakt-cards">
-                {CONTACT_ITEMS.map(({ icon: Icon, label, value, href }) => (
-                  <div key={label} className="kontakt-card">
+        <div className="kontakt-body kontakt-body-lux">
+          <div className="kontakt-grid kontakt-grid-lux">
+            <div className="kontakt-left-lux">
+              <h2 className="kontakt-section-title">Direkter Kontakt</h2>
+              <p className="kontakt-section-sub">
+                Unser Team ist rund um die Uhr erreichbar — für Buchungen, Änderungen und Sonderwünsche.
+              </p>
+              <div className="kontakt-cards kontakt-cards-lux">
+                {CONTACT_ITEMS.map(({ icon: Icon, label, value, href, hint }) => (
+                  <div key={label} className="kontakt-card kontakt-card-lux">
                     <div className="icon-wrap">
                       <Icon size={20} strokeWidth={2} />
                     </div>
@@ -56,15 +71,17 @@ export default function KontaktPage() {
                     ) : (
                       <p className="value">{value}</p>
                     )}
+                    <p className="kontakt-card-hint">{hint}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="kontakt-form-card">
+            <div className="kontakt-form-card kontakt-form-card-lux">
               <h2>Nachricht senden</h2>
               <p className="form-hint">
-                Schreiben Sie uns – wir melden uns in der Regel innerhalb weniger Stunden.
+                Beschreiben Sie Ihre Anfrage — Transferdatum, Route, Personenzahl oder Sonderwünsche.
+                Wir melden uns schnellstmöglich bei Ihnen.
               </p>
               <KontaktForm />
             </div>
@@ -72,7 +89,7 @@ export default function KontaktPage() {
         </div>
 
         <div className="kontakt-map-bar">
-          <span>Standort · Kloten ZH</span>
+          <span>Standort · Kloten ZH · 5 Min. zum Flughafen</span>
         </div>
         <iframe
           className="map-full"

@@ -56,7 +56,6 @@ export default function RoutesSection() {
               <div className="route-price-block">
                 <span className="route-price-new">
                   {route.price.toFixed(2)} CHF
-                  <span className="price-loader" aria-hidden />
                 </span>
                 {route.oldPrice != null && (
                   <span className="route-price-old">{route.oldPrice} CHF</span>

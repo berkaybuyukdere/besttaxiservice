@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { isToday } from '@/lib/utils';
 import LuxDatePicker from '@/components/booking/LuxDatePicker';
+import LocationAutocomplete from '@/components/booking/LocationAutocomplete';
 
 type TabType = 'distance' | 'hourly' | 'check';
 
@@ -85,8 +86,8 @@ export default function BookingCard() {
       </div>
 
       {activeTab === 'check' ? (
-        <div className="booking-row">
-          <div className="booking-field" style={{ flex: 2 }}>
+        <div className="booking-lux-grid booking-lux-grid-check">
+          <div className="booking-field booking-field-wide">
             <label>{t('bookingIdLabel')}</label>
             <div className="lux-input-wrap">
               <input
@@ -105,11 +106,11 @@ export default function BookingCard() {
         </div>
       ) : (
         <>
-          <div className="booking-row">
-            <div className="booking-field sm">
+          <div className={cn('booking-lux-grid', activeTab === 'hourly' && 'booking-lux-grid-hourly')}>
+            <div className="booking-field">
               <LuxDatePicker value={pickupDate} onChange={setPickupDate} label={t('dateLabel')} />
             </div>
-            <div className="booking-field sm">
+            <div className="booking-field">
               <label>{t('timeLabel')}</label>
               <div className="lux-input-wrap">
                 <input
@@ -121,7 +122,7 @@ export default function BookingCard() {
               </div>
             </div>
             {activeTab === 'hourly' && (
-              <div className="booking-field sm">
+              <div className="booking-field">
                 <label>{t('arrivalLabel')}</label>
                 <div className="lux-input-wrap">
                   <input
@@ -133,7 +134,7 @@ export default function BookingCard() {
                 </div>
               </div>
             )}
-            <div className="booking-field">
+            <div className="booking-field booking-field-wide">
               <label>{t('fromLabel')}</label>
               <div className="lux-input-wrap">
                 <input
@@ -146,17 +147,13 @@ export default function BookingCard() {
               </div>
             </div>
             {activeTab === 'distance' && (
-              <div className="booking-field">
-                <label>{t('toLabel')}</label>
-                <div className="lux-input-wrap">
-                  <input
-                    type="text"
-                    value={dropoffLocation}
-                    onChange={(e) => setDropoffLocation(e.target.value)}
-                    placeholder={t('toPlaceholder')}
-                    className="lux-input"
-                  />
-                </div>
+              <div className="booking-field booking-field-wide">
+                <LocationAutocomplete
+                  label={t('toLabel')}
+                  value={dropoffLocation}
+                  onChange={setDropoffLocation}
+                  placeholder={t('toPlaceholder')}
+                />
               </div>
             )}
             <button type="button" className="booking-search-btn" onClick={handleSearch}>

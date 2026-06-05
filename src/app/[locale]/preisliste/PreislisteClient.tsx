@@ -60,9 +60,7 @@ export default function PreislisteClient() {
     <>
       <div className="page-hero-sm">
         <div className="section" style={{ padding: 0 }}>
-          <p className="micro mb-2" style={{ color: 'var(--accent)' }}>
-            Transparent · Fixpreis
-          </p>
+          <p className="micro mb-2 lux-gold">Transparent · Fixpreis</p>
           <h1>
             {t('title').split(' ')[0]} <span>{t('title').split(' ').slice(1).join(' ') || 'Preise'}</span>
           </h1>
@@ -70,13 +68,13 @@ export default function PreislisteClient() {
         </div>
       </div>
 
-      <section className="section">
-        <div className="preisliste-layout">
-          <aside className="preisliste-sidebar">
-            <p className="label-xs mb-3 flex items-center gap-2">
+      <section className="section preisliste-section-lux">
+        <div className="preisliste-layout-lux">
+          <aside className="preisliste-sidebar-lux">
+            <p className="admin-label mb-3 flex items-center gap-2">
               <MapPin size={12} /> Region wählen
             </p>
-            <div className="booking-input mb-4">
+            <div className="preisliste-search-lux">
               <Search size={14} />
               <input
                 type="text"
@@ -85,24 +83,30 @@ export default function PreislisteClient() {
                 placeholder={t('searchPlaceholder')}
               />
             </div>
-            {REGIONS.map((region) => (
-              <label key={region} className="region-chip">
-                <input type="checkbox" checked={selectedRegions.includes(region)} onChange={() => toggleRegion(region)} />
-                {region}
-              </label>
-            ))}
+            <div className="preisliste-regions">
+              {REGIONS.map((region) => (
+                <label key={region} className={cn('region-chip-lux', selectedRegions.includes(region) && 'active')}>
+                  <input type="checkbox" checked={selectedRegions.includes(region)} onChange={() => toggleRegion(region)} />
+                  {region}
+                </label>
+              ))}
+            </div>
 
             {selectedRegions.length > 0 && availableLocations.length > 0 && (
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="flex justify-between items-center mb-3">
-                  <p className="label-xs">{t('selectLocations')}</p>
-                  <button type="button" className="text-[10px] font-bold text-[var(--accent-dark)]" onClick={() => setSelectedLocations(availableLocations.map((l) => l.location))}>
+              <div className="preisliste-locations">
+                <div className="preisliste-locations-head">
+                  <p className="admin-label">{t('selectLocations')}</p>
+                  <button
+                    type="button"
+                    className="preisliste-select-all"
+                    onClick={() => setSelectedLocations(availableLocations.map((l) => l.location))}
+                  >
                     {t('selectAll')}
                   </button>
                 </div>
-                <div className="max-h-48 overflow-y-auto">
+                <div className="preisliste-locations-list">
                   {availableLocations.map((entry) => (
-                    <label key={entry.location} className="region-chip text-xs">
+                    <label key={entry.location} className="region-chip-lux small">
                       <input
                         type="checkbox"
                         checked={selectedLocations.includes(entry.location)}
@@ -116,24 +120,22 @@ export default function PreislisteClient() {
             )}
           </aside>
 
-          <div>
+          <div className="preisliste-main-lux">
             {filteredResults.length === 0 ? (
-              <div className="admin-card text-center py-16">
-                <Plane size={40} className="mx-auto mb-4 text-gray-300" />
-                <p className="text-gray-500">{t('noSelection')}</p>
+              <div className="preisliste-empty">
+                <Plane size={40} />
+                <p>{t('noSelection')}</p>
               </div>
             ) : (
-              <div className="preisliste-table-wrap">
-                <div className="flex justify-between items-center px-5 py-4 bg-gray-100 border-b border-gray-200">
-                  <span className="text-sm font-semibold">
-                    {filteredResults.length} Destinationen
-                  </span>
-                  <button type="button" className="btn-ghost text-xs flex items-center gap-1" onClick={() => window.print()}>
+              <div className="preisliste-table-wrap-lux">
+                <div className="preisliste-table-head">
+                  <span>{filteredResults.length} Destinationen</span>
+                  <button type="button" className="btn-ghost-lux" onClick={() => window.print()}>
                     <Download size={12} /> {t('printExport')}
                   </button>
                 </div>
-                <div className="overflow-x-auto">
-                  <table className="preisliste-table">
+                <div className="preisliste-table-scroll">
+                  <table className="preisliste-table-lux">
                     <thead>
                       <tr>
                         <th>Destination</th>
@@ -148,21 +150,13 @@ export default function PreislisteClient() {
                       {filteredResults.map((entry) => (
                         <tr key={`${entry.region}-${entry.location}`}>
                           <td>
-                            <div className="font-semibold">{entry.location}</div>
-                            <div className="text-[10px] text-gray-500 uppercase tracking-wide">{entry.region}</div>
+                            <div className="dest-name">{entry.location}</div>
+                            <div className="dest-region">{entry.region}</div>
                           </td>
-                          <td className="price-cell">
-                            <span>CHF {entry.taxiToAirport}</span>
-                          </td>
-                          <td className="price-cell">
-                            <span>CHF {entry.vanToAirport}</span>
-                          </td>
-                          <td className="price-cell">
-                            <span>CHF {entry.taxiToZurich}</span>
-                          </td>
-                          <td className="price-cell">
-                            <span>CHF {entry.vanToZurich}</span>
-                          </td>
+                          <td className="price-val">CHF {entry.taxiToAirport}</td>
+                          <td className="price-val">CHF {entry.vanToAirport}</td>
+                          <td className="price-val">CHF {entry.taxiToZurich}</td>
+                          <td className="price-val">CHF {entry.vanToZurich}</td>
                           <td>
                             <button
                               type="button"

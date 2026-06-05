@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
-import { Users, Briefcase, ArrowRight } from 'lucide-react';
+import { Users, Briefcase, ArrowRight, Shield, Wifi, Sparkles } from 'lucide-react';
 import { FLEET_VEHICLES } from '@/lib/fleet-data';
 
 type FleetSectionProps = {
@@ -23,16 +23,19 @@ export default function FleetSection({ fullPage = false }: FleetSectionProps) {
           <p className="lead text-gray-400">{t('subtitle')}</p>
         </header>
 
-        <div className="fleet-grid-lux">
-          {FLEET_VEHICLES.map((v) => (
-            <article key={v.id} className={`fleet-card-lux${v.recommended ? ' featured' : ''}`}>
-              {v.recommended && <span className="fleet-badge-lux">{t('recommended')}</span>}
-              <div className="fleet-photo-lux">
-                <Image src={v.image} alt={v.name} fill sizes="(max-width:768px) 100vw, 33vw" style={{ objectFit: 'cover' }} />
+        <div className="fleet-vertical-list">
+          {FLEET_VEHICLES.map((v, index) => (
+            <article
+              key={v.id}
+              className={`fleet-row-vertical${index % 2 === 1 ? ' reverse' : ''}${v.recommended ? ' featured' : ''}`}
+            >
+              <div className="fleet-photo-vertical">
+                {v.recommended && <span className="fleet-badge-lux">{t('recommended')}</span>}
+                <Image src={v.image} alt={v.name} fill sizes="(max-width:768px) 100vw, 50vw" style={{ objectFit: 'cover' }} />
               </div>
-              <div className="fleet-body-lux">
-                <h3 className="fleet-name-lux">{v.name}</h3>
+              <div className="fleet-detail-vertical">
                 <p className="fleet-model-lux">{v.model}</p>
+                <h3 className="fleet-name-lux">{v.name}</h3>
                 <p className="fleet-desc-lux">{v.description}</p>
                 <div className="fleet-specs-row">
                   <span className="fleet-spec-item">
@@ -44,6 +47,11 @@ export default function FleetSection({ fullPage = false }: FleetSectionProps) {
                     {v.luggage} {t('luggage')}
                   </span>
                 </div>
+                <ul className="fleet-features-list">
+                  <li><Shield size={12} /> Professioneller Chauffeur</li>
+                  <li><Wifi size={12} /> WLAN &amp; USB-Ladegerät</li>
+                  <li><Sparkles size={12} /> Gratis Wasser &amp; Zeitungen</li>
+                </ul>
                 <div className="fleet-price-row">
                   <span className="from">{t('from')}</span>
                   <span className="amount">
@@ -52,7 +60,7 @@ export default function FleetSection({ fullPage = false }: FleetSectionProps) {
                   </span>
                 </div>
                 <Link href={`/${locale}/booking/search?vehicle=${v.id}`} className="fleet-cta-lux">
-                  {t('bookNow')}
+                  {t('bookNow')} <ArrowRight size={14} />
                 </Link>
               </div>
             </article>

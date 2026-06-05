@@ -5,68 +5,68 @@ import { CalendarCheck, AlertCircle, TrendingUp, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const MOCK = [
-  { id: 'BTS-001', customer: 'Wolfgang Müller', route: 'ZRH → Zug', status: 'CONFIRMED', price: 138, sameDay: false },
-  { id: 'BTS-002', customer: 'Sara Kessler', route: 'ZRH → Davos', status: 'PENDING', price: 600, sameDay: true },
-  { id: 'BTS-003', customer: 'Hans Schmidt', route: 'ZRH → Luzern', status: 'PENDING', price: 190, sameDay: true },
+  { id: 'RES-10001', customer: 'Wolfgang Müller', route: 'ZRH → Zug', status: 'CONFIRMED', price: 138, sameDay: false },
+  { id: 'RES-10002', customer: 'Sara Kessler', route: 'ZRH → Davos', status: 'PENDING', price: 600, sameDay: true },
+  { id: 'RES-10003', customer: 'Hans Schmidt', route: 'ZRH → Luzern', status: 'PENDING', price: 190, sameDay: true },
 ];
 
 export default function AdminDashboardPage() {
   return (
     <>
-      <div className="mb-8">
-        <p className="micro text-[var(--accent-dark)] mb-1">Übersicht</p>
-        <h1 className="text-2xl font-bold">Dashboard</h1>
+      <div className="admin-page-header">
+        <div>
+          <p className="micro lux-gold mb-1">Übersicht</p>
+          <h1 className="admin-page-title">Dashboard</h1>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="admin-stat-grid">
         {[
           { label: 'Heute', value: '4', icon: CalendarCheck },
           { label: 'Ausstehend', value: '2', icon: AlertCircle, urgent: true },
           { label: 'Umsatz (Monat)', value: 'CHF 8’450', icon: TrendingUp },
           { label: 'Gesamt', value: '127', icon: Clock },
         ].map(({ label, value, icon: Icon, urgent }) => (
-          <div key={label} className="admin-card">
-            <div className="flex justify-between mb-3">
-              <span className="label-xs">{label}</span>
-              <Icon size={18} className="text-gray-400" />
+          <div key={label} className="admin-stat-card">
+            <div className="admin-stat-top">
+              <span className="admin-label">{label}</span>
+              <Icon size={18} className="admin-stat-icon" />
             </div>
-            <div className="text-2xl font-bold flex items-center gap-2">
+            <div className="admin-stat-value">
               {value}
-              {urgent && <span className="text-[10px] bg-red-100 text-red-600 px-2 py-0.5 rounded-full">!</span>}
+              {urgent && <span className="admin-urgent-badge">!</span>}
             </div>
           </div>
         ))}
       </div>
 
-      <div className="admin-card overflow-hidden p-0">
-        <div className="px-6 py-4 border-b border-gray-200 flex justify-between">
-          <h2 className="font-semibold">Aktuelle Buchungen</h2>
-          <Link href="/admin/bookings" className="text-sm font-medium text-[var(--accent-dark)]">
+      <div className="admin-table-wrap">
+        <div className="admin-table-header">
+          <h2>Aktuelle Buchungen</h2>
+          <Link href="/admin/bookings" className="admin-link">
             Alle →
           </Link>
         </div>
-        <table className="w-full text-sm">
+        <table className="admin-table">
           <thead>
-            <tr className="bg-gray-50 text-left">
-              <th className="px-6 py-3 label-xs">ID</th>
-              <th className="px-4 py-3 label-xs">Kunde</th>
-              <th className="px-4 py-3 label-xs">Route</th>
-              <th className="px-4 py-3 label-xs">Status</th>
-              <th className="px-6 py-3 label-xs text-right">Preis</th>
+            <tr>
+              <th>ID</th>
+              <th>Kunde</th>
+              <th>Route</th>
+              <th>Status</th>
+              <th className="text-right">Preis</th>
             </tr>
           </thead>
           <tbody>
             {MOCK.map((b) => (
-              <tr key={b.id} className={cn('border-t border-gray-100', b.sameDay && 'bg-amber-50')}>
-                <td className="px-6 py-3 font-mono text-xs">{b.id}</td>
-                <td className="px-4 py-3 font-medium">{b.customer}</td>
-                <td className="px-4 py-3 text-gray-500">{b.route}</td>
-                <td className="px-4 py-3">
-                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${b.status === 'PENDING' ? 'bg-amber-100 text-amber-800' : 'bg-green-100 text-green-800'}`}>
-                    {b.status}
-                  </span>
+              <tr key={b.id} className={cn(b.sameDay && 'row-urgent')}>
+                <td><code className="res-code">{b.id}</code></td>
+                <td><strong>{b.customer}</strong></td>
+                <td>{b.route}</td>
+                <td>
+                  <span className={`status-pill status-${b.status.toLowerCase()}`}>{b.status}</span>
                 </td>
-                <td className="px-6 py-3 text-right font-bold">CHF {b.price}</td>
+                <td className="price-cell text-right">CHF {b.price}</td>
               </tr>
             ))}
           </tbody>
