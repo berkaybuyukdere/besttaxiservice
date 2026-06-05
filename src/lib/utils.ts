@@ -13,10 +13,8 @@ export function formatPrice(price: number): string {
 }
 
 export function generateBookingNumber(): string {
-  const prefix = 'BTS';
-  const timestamp = Date.now().toString(36).toUpperCase();
-  const random = Math.random().toString(36).substring(2, 5).toUpperCase();
-  return `${prefix}-${timestamp}-${random}`;
+  const num = Math.floor(10000 + Math.random() * 90000);
+  return `RES-${num}`;
 }
 
 export function isToday(date: Date): boolean {

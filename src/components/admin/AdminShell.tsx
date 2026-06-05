@@ -14,7 +14,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
       setReady(true);
       return;
     }
-    if (!localStorage.getItem('adminAuth')) {
+    if (!sessionStorage.getItem('adminAuth') && !localStorage.getItem('adminAuth')) {
       router.replace('/admin/login');
       return;
     }

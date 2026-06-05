@@ -3,21 +3,13 @@
 import { useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import {
-  Calendar,
-  Clock,
-  MapPin,
-  MapPinCheck,
-  Search,
-  AlertTriangle,
-  Route,
-  Timer,
-  FileSearch,
-} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { isToday } from '@/lib/utils';
+import LuxDatePicker from '@/components/booking/LuxDatePicker';
 
 type TabType = 'distance' | 'hourly' | 'check';
+
+const DEFAULT_FROM = 'Zürich Flughafen (ZRH)';
 
 export default function BookingCard() {
   const t = useTranslations('booking');
@@ -28,15 +20,37 @@ export default function BookingCard() {
   const [pickupDate, setPickupDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [pickupTime, setPickupTime] = useState('08:00');
   const [arrivalTime, setArrivalTime] = useState('10:00');
-  const [pickupLocation, setPickupLocation] = useState('');
+  const [pickupLocation, setPickupLocation] = useState(DEFAULT_FROM);
   const [dropoffLocation, setDropoffLocation] = useState('');
   const [bookingId, setBookingId] = useState('');
+  const [checkLoading, setCheckLoading] = useState(false);
+  const [checkError, setCheckError] = useState('');
 
   const isSameDay = pickupDate ? isToday(new Date(pickupDate)) : false;
 
+  const handleCheck = async () => {
+    const num = bookingId.trim().toUpperCase();
+    if (!num) return;
+    setCheckLoading(true);
+    setCheckError('');
+    try {
+      const res = await fetch(`/api/booking/lookup?number=${encodeURIComponent(num)}`);
+      const data = await res.json();
+      if (!res.ok) {
+        setCheckError(data.error || 'Nicht gefunden');
+        return;
+      }
+      router.push(`/${locale}/booking/status?number=${encodeURIComponent(num)}`);
+    } catch {
+      setCheckError('Verbindungsfehler');
+    } finally {
+      setCheckLoading(false);
+    }
+  };
+
   const handleSearch = () => {
     if (activeTab === 'check') {
-      router.push(`/${locale}/booking/search?id=${bookingId}`);
+      handleCheck();
       return;
     }
     const params = new URLSearchParams({
@@ -49,14 +63,14 @@ export default function BookingCard() {
     router.push(`/${locale}/booking/search?${params.toString()}`);
   };
 
-  const tabs: { id: TabType; label: string; icon: React.ReactNode }[] = [
-    { id: 'distance', label: t('tabDistance'), icon: <Route size={14} /> },
-    { id: 'hourly', label: t('tabHourly'), icon: <Timer size={14} /> },
-    { id: 'check', label: t('tabCheck'), icon: <FileSearch size={14} /> },
+  const tabs: { id: TabType; label: string }[] = [
+    { id: 'distance', label: t('tabDistance') },
+    { id: 'hourly', label: t('tabHourly') },
+    { id: 'check', label: t('tabCheck') },
   ];
 
   return (
-    <div className="booking-horizontal">
+    <div className="booking-lux">
       <div className="booking-tabs">
         {tabs.map((tab) => (
           <button
@@ -65,7 +79,6 @@ export default function BookingCard() {
             onClick={() => setActiveTab(tab.id)}
             className={cn('booking-tab', activeTab === tab.id && 'active')}
           >
-            {tab.icon}
             {tab.label}
           </button>
         ))}
@@ -74,89 +87,83 @@ export default function BookingCard() {
       {activeTab === 'check' ? (
         <div className="booking-row">
           <div className="booking-field" style={{ flex: 2 }}>
-            <label>
-              <FileSearch size={12} /> {t('bookingIdLabel')}
-            </label>
-            <div className="booking-input">
+            <label>{t('bookingIdLabel')}</label>
+            <div className="lux-input-wrap">
               <input
                 type="text"
                 value={bookingId}
-                onChange={(e) => setBookingId(e.target.value)}
-                placeholder={t('bookingIdPlaceholder')}
+                onChange={(e) => setBookingId(e.target.value.toUpperCase())}
+                placeholder="RES-12345"
+                className="lux-input"
               />
             </div>
+            {checkError && <p className="lux-error">{checkError}</p>}
           </div>
-          <button type="button" className="booking-search-btn" onClick={handleSearch}>
-            <Search size={16} /> {t('checkButton')}
+          <button type="button" className="booking-search-btn" onClick={handleCheck} disabled={checkLoading}>
+            {checkLoading ? '…' : t('checkButton')}
           </button>
         </div>
       ) : (
         <>
           <div className="booking-row">
             <div className="booking-field sm">
-              <label>
-                <Calendar size={12} /> {t('dateLabel')}
-              </label>
-              <div className="booking-input">
-                <input type="date" value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} />
-              </div>
+              <LuxDatePicker value={pickupDate} onChange={setPickupDate} label={t('dateLabel')} />
             </div>
             <div className="booking-field sm">
-              <label>
-                <Clock size={12} /> {t('timeLabel')}
-              </label>
-              <div className="booking-input">
-                <input type="time" value={pickupTime} onChange={(e) => setPickupTime(e.target.value)} />
+              <label>{t('timeLabel')}</label>
+              <div className="lux-input-wrap">
+                <input
+                  type="time"
+                  value={pickupTime}
+                  onChange={(e) => setPickupTime(e.target.value)}
+                  className="lux-input"
+                />
               </div>
             </div>
             {activeTab === 'hourly' && (
               <div className="booking-field sm">
-                <label>
-                  <Clock size={12} /> {t('arrivalLabel')}
-                </label>
-                <div className="booking-input">
-                  <input type="time" value={arrivalTime} onChange={(e) => setArrivalTime(e.target.value)} />
+                <label>{t('arrivalLabel')}</label>
+                <div className="lux-input-wrap">
+                  <input
+                    type="time"
+                    value={arrivalTime}
+                    onChange={(e) => setArrivalTime(e.target.value)}
+                    className="lux-input"
+                  />
                 </div>
               </div>
             )}
             <div className="booking-field">
-              <label>
-                <MapPin size={12} /> {t('fromLabel')}
-              </label>
-              <div className="booking-input">
+              <label>{t('fromLabel')}</label>
+              <div className="lux-input-wrap">
                 <input
                   type="text"
                   value={pickupLocation}
                   onChange={(e) => setPickupLocation(e.target.value)}
                   placeholder={t('fromPlaceholder')}
+                  className="lux-input"
                 />
               </div>
             </div>
             {activeTab === 'distance' && (
               <div className="booking-field">
-                <label>
-                  <MapPinCheck size={12} /> {t('toLabel')}
-                </label>
-                <div className="booking-input">
+                <label>{t('toLabel')}</label>
+                <div className="lux-input-wrap">
                   <input
                     type="text"
                     value={dropoffLocation}
                     onChange={(e) => setDropoffLocation(e.target.value)}
                     placeholder={t('toPlaceholder')}
+                    className="lux-input"
                   />
                 </div>
               </div>
             )}
             <button type="button" className="booking-search-btn" onClick={handleSearch}>
-              <Search size={16} /> {t('searchButton')}
+              {t('searchButton')}
             </button>
           </div>
-          {isSameDay && (
-            <div className="same-day-banner">
-              <AlertTriangle size={14} />
-              {t('sameDayWarning')}
-            </div>
-          )}
+          {isSameDay && <div className="same-day-banner">{t('sameDayWarning')}</div>}
         </>
       )}
     </div>

@@ -3,7 +3,7 @@ import PreislisteClient from './PreislisteClient';
 
 export default function PreislistePage() {
   return (
-    <PageShell>
+    <PageShell className="lux-preisliste">
       <PreislisteClient />
     </PageShell>
   );

@@ -4,39 +4,7 @@ import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import { Users, Briefcase, ArrowRight } from 'lucide-react';
-
-const VEHICLES = [
-  {
-    id: 'business',
-    nameKey: 'business',
-    modelKey: 'businessModel',
-    capacity: 7,
-    luggage: 7,
-    startPrice: 70,
-    image: '/images/besttaxi.png',
-    recommended: false,
-  },
-  {
-    id: 'vip',
-    nameKey: 'vip',
-    modelKey: 'vipModel',
-    capacity: 5,
-    luggage: 5,
-    startPrice: 90,
-    image: '/images/beststaxi2.png',
-    recommended: true,
-  },
-  {
-    id: 'premium',
-    nameKey: 'premium',
-    modelKey: 'premiumModel',
-    capacity: 3,
-    luggage: 3,
-    startPrice: 110,
-    image: '/images/besttaxi.png',
-    recommended: false,
-  },
-] as const;
+import { FLEET_VEHICLES } from '@/lib/fleet-data';
 
 type FleetSectionProps = {
   fullPage?: boolean;
@@ -47,40 +15,32 @@ export default function FleetSection({ fullPage = false }: FleetSectionProps) {
   const locale = useLocale();
 
   return (
-    <section className={fullPage ? '' : 'section-gray'}>
+    <section className={fullPage ? 'lux-fleet-page' : 'lux-section-dark'}>
       <div className="fleet-section">
         <header className="fleet-section-header">
-          <p className="micro mb-3 text-[var(--accent-dark)]">Premium Flotte</p>
-          <h2 className="heading-xl">{t('title')}</h2>
-          <p className="lead">{t('subtitle')}</p>
+          <p className="micro lux-gold mb-3">Premium Flotte</p>
+          <h2 className="heading-xl text-white">{t('title')}</h2>
+          <p className="lead text-gray-400">{t('subtitle')}</p>
         </header>
 
-        <div className="fleet-grid">
-          {VEHICLES.map((v) => (
-            <article
-              key={v.id}
-              className={`fleet-card-v2${v.recommended ? ' is-featured' : ''}`}
-            >
-              {v.recommended && <span className="fleet-badge">{t('recommended')}</span>}
-              <div className="fleet-photo">
-                <Image
-                  src={v.image}
-                  alt={t(v.nameKey)}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  style={{ objectFit: 'cover' }}
-                />
+        <div className="fleet-grid-lux">
+          {FLEET_VEHICLES.map((v) => (
+            <article key={v.id} className={`fleet-card-lux${v.recommended ? ' featured' : ''}`}>
+              {v.recommended && <span className="fleet-badge-lux">{t('recommended')}</span>}
+              <div className="fleet-photo-lux">
+                <Image src={v.image} alt={v.name} fill sizes="(max-width:768px) 100vw, 33vw" style={{ objectFit: 'cover' }} />
               </div>
-              <div className="fleet-body">
-                <h3 className="fleet-name">{t(v.nameKey)}</h3>
-                <p className="fleet-model">{t(v.modelKey)}</p>
+              <div className="fleet-body-lux">
+                <h3 className="fleet-name-lux">{v.name}</h3>
+                <p className="fleet-model-lux">{v.model}</p>
+                <p className="fleet-desc-lux">{v.description}</p>
                 <div className="fleet-specs-row">
                   <span className="fleet-spec-item">
-                    <Users size={14} strokeWidth={2.5} />
+                    <Users size={13} strokeWidth={2} />
                     {v.capacity} {t('passengers')}
                   </span>
                   <span className="fleet-spec-item">
-                    <Briefcase size={14} strokeWidth={2.5} />
+                    <Briefcase size={13} strokeWidth={2} />
                     {v.luggage} {t('luggage')}
                   </span>
                 </div>
@@ -91,10 +51,7 @@ export default function FleetSection({ fullPage = false }: FleetSectionProps) {
                     <span>CHF</span>
                   </span>
                 </div>
-                <Link
-                  href={`/${locale}/booking/search?vehicle=${v.id}`}
-                  className="fleet-cta"
-                >
+                <Link href={`/${locale}/booking/search?vehicle=${v.id}`} className="fleet-cta-lux">
                   {t('bookNow')}
                 </Link>
               </div>
@@ -104,10 +61,7 @@ export default function FleetSection({ fullPage = false }: FleetSectionProps) {
 
         {!fullPage && (
           <div className="text-center" style={{ marginTop: 48 }}>
-            <Link
-              href={`/${locale}/unsere-flotte`}
-              className="btn-accent no-underline inline-flex items-center gap-2"
-            >
+            <Link href={`/${locale}/unsere-flotte`} className="btn-accent no-underline inline-flex items-center gap-2">
               {t('viewAll')} <ArrowRight size={16} />
             </Link>
           </div>

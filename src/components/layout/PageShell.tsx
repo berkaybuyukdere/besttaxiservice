@@ -3,14 +3,16 @@ import Footer from './Footer';
 
 export default function PageShell({
   children,
+  className,
 }: {
   children: React.ReactNode;
   darkHero?: boolean;
+  className?: string;
 }) {
   return (
     <>
       <Navbar />
-      <main>{children}</main>
+      <main className={className}>{children}</main>
       <Footer />
     </>
   );

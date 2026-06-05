@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { Mail, Phone, MapPin, Clock, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock } from 'lucide-react';
+import KontaktForm from '@/components/kontakt/KontaktForm';
 import PageShell from '@/components/layout/PageShell';
 
 const CONTACT_ITEMS = [
@@ -65,24 +66,7 @@ export default function KontaktPage() {
               <p className="form-hint">
                 Schreiben Sie uns – wir melden uns in der Regel innerhalb weniger Stunden.
               </p>
-              <form className="kontakt-form">
-                <div className="form-group">
-                  <label htmlFor="kontakt-name">Name</label>
-                  <input id="kontakt-name" type="text" name="name" autoComplete="name" />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="kontakt-email">E-Mail</label>
-                  <input id="kontakt-email" type="email" name="email" autoComplete="email" />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="kontakt-message">Nachricht</label>
-                  <textarea id="kontakt-message" name="message" rows={5} />
-                </div>
-                <button type="submit" className="btn-accent inline-flex items-center gap-2">
-                  <Send size={16} />
-                  Senden
-                </button>
-              </form>
+              <KontaktForm />
             </div>
           </div>
         </div>
