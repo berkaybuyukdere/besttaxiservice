@@ -1,13 +1,19 @@
 import nodemailer from 'nodemailer';
 
+function getGmailPassword() {
+  return (process.env.GMAIL_APP_PASSWORD || process.env.SMTP_PASS || '').replace(/\s/g, '');
+}
+
 function getTransporter() {
   const user = process.env.GMAIL_USER || process.env.SMTP_USER;
-  const pass = (process.env.GMAIL_APP_PASSWORD || process.env.SMTP_PASS || '').replace(/\s/g, '');
+  const pass = getGmailPassword();
 
   if (!user || !pass) return null;
 
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: { user, pass },
   });
 }
@@ -20,8 +26,8 @@ export async function sendMail(options: {
 }) {
   const transporter = getTransporter();
   if (!transporter) {
-    console.warn('Email not configured — set GMAIL_USER and GMAIL_APP_PASSWORD');
-    return false;
+    console.error('Email not configured — set GMAIL_USER and GMAIL_APP_PASSWORD on Vercel');
+    throw new Error('Email not configured');
   }
 
   const from = process.env.EMAIL_FROM || process.env.GMAIL_USER || 'contactbuyukdere@gmail.com';

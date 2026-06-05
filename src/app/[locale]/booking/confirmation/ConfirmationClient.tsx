@@ -3,8 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import Link from 'next/link';
-import { CheckCircle, Clock, Home, Phone } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { CheckCircle2, Clock, Home, Phone, Mail, ArrowRight } from 'lucide-react';
 
 export default function ConfirmationClient() {
   const searchParams = useSearchParams();
@@ -12,49 +11,56 @@ export default function ConfirmationClient() {
   const bookingId = searchParams.get('id') || '';
 
   return (
-    <div className="max-w-xl mx-auto px-6 py-16 text-center">
-      <div className="w-16 h-16 rounded-full bg-[rgba(216,90,48,0.1)] flex items-center justify-center mx-auto mb-6">
-        <CheckCircle size={32} color="#D85A30" />
-      </div>
-
-      <h1 className="text-[26px] font-medium mb-3">Buchung erhalten!</h1>
-      <p className="text-[var(--color-text-secondary)] mb-6 leading-relaxed">
-        Ihre Buchungsanfrage wurde erfolgreich übermittelt. Sie erhalten in Kürze eine Bestätigungs-E-Mail.
-      </p>
-
-      {bookingId && (
-        <div className="bg-[var(--color-background-secondary)] border border-[var(--color-border-tertiary)] rounded-[12px] p-5 mb-6">
-          <div className="text-[12px] text-[var(--color-text-secondary)] uppercase tracking-wide mb-1">Ihre Buchungs-ID</div>
-          <div className="text-[22px] font-medium text-[#D85A30] font-mono">{bookingId}</div>
-          <div className="text-[11px] text-[var(--color-text-secondary)] mt-1">Bitte bewahren Sie diese ID für Ihre Unterlagen auf.</div>
+    <div className="lux-confirmation-page">
+      <div className="lux-confirmation-card">
+        <div className="lux-confirmation-icon">
+          <CheckCircle2 size={36} strokeWidth={1.5} />
         </div>
-      )}
 
-      <div className="bg-[var(--color-warning-bg)] border border-[var(--color-warning)] rounded-[12px] p-4 mb-8 text-left">
-        <div className="flex items-start gap-2">
-          <Clock size={15} className="text-[#854F0B] shrink-0 mt-0.5" />
-          <div>
-            <div className="text-[13px] font-medium text-[#854F0B] mb-1">Nächste Schritte</div>
-            <ul className="text-[12px] text-[#854F0B] space-y-1 list-disc list-inside">
-              <li>Bestätigungs-E-Mail prüfen</li>
-              <li>Bei Gleichtag-Buchung: Admin-Bestätigung abwarten (max. 30 Min.)</li>
-              <li>Fahrerdaten werden 24h vor Abfahrt mitgeteilt</li>
-            </ul>
+        <p className="micro lux-gold mb-2">Schritt 4 · Bestätigung</p>
+        <h1>Buchung erhalten!</h1>
+        <p className="lux-confirmation-lead">
+          Ihre Anfrage wurde erfolgreich übermittelt. Sie erhalten in Kürze eine Bestätigungs-E-Mail
+          an Ihre angegebene Adresse.
+        </p>
+
+        {bookingId && (
+          <div className="lux-confirmation-id">
+            <span className="label">Ihre Buchungs-ID</span>
+            <strong>{bookingId}</strong>
+            <span className="hint">Bitte für Rückfragen und Statusabfrage bereithalten.</span>
           </div>
-        </div>
-      </div>
+        )}
 
-      <div className="flex flex-col sm:flex-row gap-3">
-        <Link href={`/${locale}`} className="flex-1">
-          <Button variant="outline" className="w-full gap-1.5">
+        <div className="lux-confirmation-steps">
+          <div className="steps-head">
+            <Clock size={16} />
+            <span>Nächste Schritte</span>
+          </div>
+          <ul>
+            <li>Bestätigungs-E-Mail im Posteingang prüfen (auch Spam-Ordner)</li>
+            <li>Bei Gleichtag-Buchung: Admin-Bestätigung innerhalb von 30 Minuten</li>
+            <li>Fahrerdetails werden spätestens 24h vor Abfahrt mitgeteilt</li>
+          </ul>
+        </div>
+
+        <div className="lux-confirmation-actions">
+          <Link href={`/${locale}`} className="btn-ghost-lux no-underline">
             <Home size={14} /> Zur Startseite
-          </Button>
-        </Link>
-        <a href="tel:+41763020326" className="flex-1">
-          <Button className="w-full gap-1.5">
+          </Link>
+          <a href="tel:+41763020326" className="btn-accent no-underline">
             <Phone size={14} /> +41 76 302 03 26
-          </Button>
-        </a>
+          </a>
+        </div>
+
+        <p className="lux-confirmation-foot">
+          <Mail size={12} /> Keine E-Mail erhalten?{' '}
+          <a href="mailto:info@besttaxiservice.ch">info@besttaxiservice.ch</a>
+          {' · '}
+          <Link href={`/${locale}/booking/status?number=${encodeURIComponent(bookingId)}`}>
+            Status prüfen <ArrowRight size={12} />
+          </Link>
+        </p>
       </div>
     </div>
   );

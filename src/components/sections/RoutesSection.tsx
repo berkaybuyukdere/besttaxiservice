@@ -3,15 +3,7 @@
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import { Percent, ArrowRight } from 'lucide-react';
-
-const ROUTES = [
-  { to: 'Zug', slug: 'zug', km: 46, duration: '55 min', type: 'Taxi', price: 138.69, oldPrice: 176, discount: 21 },
-  { to: 'Luzern', slug: 'luzern', km: 63, duration: '1h 16m', type: 'Taxi', price: 189.75, oldPrice: 241, discount: 21 },
-  { to: 'Basel', slug: 'basel', km: 86, duration: '1h 43m', type: 'Taxi', price: 258.5, oldPrice: 328, discount: 21 },
-  { to: 'Davos', slug: 'davos', km: 150, duration: '2h 20m', type: 'Van', price: 600, oldPrice: null, discount: null },
-  { to: 'St. Moritz', slug: 'st-moritz', km: 185, duration: '2h 45m', type: 'Van', price: 750, oldPrice: null, discount: null },
-  { to: 'Bern', slug: 'bern', km: 125, duration: '1h 50m', type: 'Taxi', price: 500, oldPrice: 620, discount: 19 },
-];
+import { POPULAR_ROUTES } from '@/lib/routes-data';
 
 export default function RoutesSection() {
   const t = useTranslations('routes');
@@ -27,7 +19,7 @@ export default function RoutesSection() {
         <p className="section-sub">{t('subtitle')}</p>
 
         <div className="routes-grid-modern">
-          {ROUTES.map((route) => (
+          {POPULAR_ROUTES.map((route) => (
             <Link
               key={route.slug}
               href={`/${locale}/routen/zuerich-flughafen-${route.slug}`}

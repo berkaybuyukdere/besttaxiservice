@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Phone, Mail, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { POPULAR_ROUTES, routePageSlug } from '@/lib/routes-data';
 
 const LOCALES = ['de', 'en', 'fr', 'it'] as const;
 
@@ -52,9 +53,11 @@ export default function Footer() {
           <div>
             <p className="micro mb-3 text-white/50">{t('routes')}</p>
             <div className="footer-links">
-              <Link href={`/${locale}/routen/zuerich-flughafen-zug`}>ZRH → Zug</Link>
-              <Link href={`/${locale}/routen/zuerich-flughafen-luzern`}>ZRH → Luzern</Link>
-              <Link href={`/${locale}/routen/zuerich-flughafen-davos`}>ZRH → Davos</Link>
+              {POPULAR_ROUTES.slice(0, 3).map((route) => (
+                <Link key={route.slug} href={`/${locale}/routen/${routePageSlug(route)}`}>
+                  ZRH → {route.to}
+                </Link>
+              ))}
             </div>
           </div>
           <div>

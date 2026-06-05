@@ -65,12 +65,19 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    sendBookingEmails(booking).catch(console.error);
+    let emailSent = false;
+    try {
+      await sendBookingEmails(booking);
+      emailSent = true;
+    } catch (emailError) {
+      console.error('Booking email error:', emailError);
+    }
 
     return NextResponse.json({
       bookingNumber: booking.bookingNumber,
       status: booking.status,
       isSameDay: sameDayBooking,
+      emailSent,
     });
   } catch (error) {
     console.error('Booking creation error:', error);

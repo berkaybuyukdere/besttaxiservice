@@ -1790,3 +1790,55 @@ body { background: var(--gray-900); color: rgba(255,255,255,0.9); }
 .phone-preview { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 6px; }
 .submit-error { margin-bottom: 12px; padding: 10px 12px; background: rgba(239,68,68,0.1); border-radius: var(--radius-md); }
 
+/* Booking confirmation */
+.lux-confirmation-page {
+  min-height: 70vh; display: flex; align-items: center; justify-content: center;
+  padding: 120px 24px 80px; background: var(--gray-900);
+}
+.lux-confirmation-card {
+  width: 100%; max-width: 560px; background: var(--gray-850);
+  border: 1px solid rgba(201,168,76,0.2); border-radius: var(--radius-xl);
+  padding: 40px 36px; text-align: center;
+}
+.lux-confirmation-icon {
+  width: 72px; height: 72px; margin: 0 auto 20px; border-radius: 50%;
+  background: rgba(201,168,76,0.12); color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+}
+.lux-confirmation-card h1 { font-size: 1.75rem; font-weight: 800; color: #fff; margin-bottom: 12px; }
+.lux-confirmation-lead { font-size: 14px; line-height: 1.65; color: rgba(255,255,255,0.55); margin-bottom: 28px; }
+.lux-confirmation-id {
+  background: var(--black); border: 1px solid rgba(201,168,76,0.25);
+  border-radius: var(--radius-lg); padding: 20px; margin-bottom: 24px;
+}
+.lux-confirmation-id .label { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+.lux-confirmation-id strong { display: block; font-size: 1.75rem; font-weight: 800; color: var(--accent); letter-spacing: 0.06em; font-family: monospace; }
+.lux-confirmation-id .hint { display: block; font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 8px; }
+.lux-confirmation-steps {
+  text-align: left; background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2);
+  border-radius: var(--radius-lg); padding: 18px 20px; margin-bottom: 28px;
+}
+.lux-confirmation-steps .steps-head { display: flex; align-items: center; gap: 8px; color: var(--accent); font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+.lux-confirmation-steps ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.lux-confirmation-steps li { font-size: 12px; color: rgba(255,255,255,0.6); padding-left: 14px; position: relative; }
+.lux-confirmation-steps li::before { content: '•'; position: absolute; left: 0; color: var(--accent); }
+.lux-confirmation-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 20px; }
+.lux-confirmation-foot { font-size: 11px; color: rgba(255,255,255,0.4); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; }
+.lux-confirmation-foot a { color: var(--accent); text-decoration: none; }
+.lux-confirmation-foot a:hover { text-decoration: underline; }
+
+/* Route detail page */
+.route-detail-section { padding-top: 48px; padding-bottom: 80px; }
+.route-detail-card {
+  max-width: 640px; margin: 0 auto; background: var(--gray-850);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-xl); padding: 36px;
+}
+.route-path-lg { margin-bottom: 24px; font-size: 1.1rem; }
+.route-detail-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; font-size: 13px; color: rgba(255,255,255,0.55); }
+.route-detail-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.route-detail-price { margin-bottom: 20px; }
+.route-detail-price .price-main { font-size: 2rem; font-weight: 800; color: var(--accent); }
+.route-detail-price .price-old { margin-left: 12px; font-size: 14px; color: rgba(255,255,255,0.35); text-decoration: line-through; }
+.route-detail-note { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.5); margin-bottom: 24px; }
+.route-detail-back { text-align: center; margin-top: 32px; }
+
